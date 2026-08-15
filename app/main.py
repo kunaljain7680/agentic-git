@@ -103,6 +103,18 @@ async def github_webhook(request: Request, background_tasks: BackgroundTasks, x_
     repo = g.get_repo(repo_full_name)
     pr = repo.get_pull(pr_number)
     
+    # ==========================================
+    # 🛑 NEW ANTI-LOOP CHECK
+    # Get the latest commit on this PR
+    commits = pr.get_commits()
+    latest_commit = commits[commits.totalCount - 1]
+    
+    # If the bot made this commit, ignore the webhook!
+    if "🤖 fix: agentic-git autonomous repair" in latest_commit.commit.message:
+        print("Ignoring webhook: This commit was made by the bot.")
+        return {"status": "ignored", "reason": "Bot's own commit"}
+    # ==========================================
+    
     changed_file_path = None
     for file in pr.get_files():
         if file.filename.endswith(".py"):
