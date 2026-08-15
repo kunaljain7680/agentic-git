@@ -114,4 +114,54 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"Test Case 10 Failed with exception: {e}")
 
+    # --- Additional Aggressive Test Cases ---
+
+    # Test Case 11: Negative float total, positive float count
+    try:
+        result = calculate_average(-7.5, 2.5)
+        assert result == -3.0, f"Test Case 11 Failed: Expected -3.0, Got {result}"
+        print(f"Test Case 11 Passed: calculate_average(-7.5, 2.5) = {result}")
+    except Exception as e:
+        print(f"Test Case 11 Failed with exception: {e}")
+
+    # Test Case 12: Very small positive float count (close to zero, but valid)
+    try:
+        result = calculate_average(10, 0.000001)
+        assert abs(result - 10_000_000.0) < 1e-9, f"Test Case 12 Failed: Expected 10_000_000.0, Got {result}"
+        print(f"Test Case 12 Passed: calculate_average(10, 0.000001) = {result}")
+    except Exception as e:
+        print(f"Test Case 12 Failed with exception: {e}")
+
+    # Test Case 13: Boolean total (False, which is 0 in numeric context)
+    try:
+        result = calculate_average(False, 5)
+        assert result == 0.0, f"Test Case 13 Failed: Expected 0.0, Got {result}"
+        print(f"Test Case 13 Passed: calculate_average(False, 5) = {result}")
+    except Exception as e:
+        print(f"Test Case 13 Failed with exception: {e}")
+
+    # Test Case 14: Boolean total (True, which is 1 in numeric context)
+    try:
+        result = calculate_average(True, 1)
+        assert result == 1.0, f"Test Case 14 Failed: Expected 1.0, Got {result}"
+        print(f"Test Case 14 Passed: calculate_average(True, 1) = {result}")
+    except Exception as e:
+        print(f"Test Case 14 Failed with exception: {e}")
+
+    # Test Case 15: Mixed types - int total, float count
+    try:
+        result = calculate_average(10, 2.5)
+        assert result == 4.0, f"Test Case 15 Failed: Expected 4.0, Got {result}"
+        print(f"Test Case 15 Passed: calculate_average(10, 2.5) = {result}")
+    except Exception as e:
+        print(f"Test Case 15 Failed with exception: {e}")
+
+    # Test Case 16: Mixed types - float total, int count
+    try:
+        result = calculate_average(7.5, 3)
+        assert result == 2.5, f"Test Case 16 Failed: Expected 2.5, Got {result}"
+        print(f"Test Case 16 Passed: calculate_average(7.5, 3) = {result}")
+    except Exception as e:
+        print(f"Test Case 16 Failed with exception: {e}")
+
     print("\nAll tests completed.")
