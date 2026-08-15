@@ -24,6 +24,8 @@ def calculate_average(total, count):
     return total / count
 
 if __name__ == '__main__':
+    import math
+
     print("Running tests for calculate_average...")
 
     # Test Case 1: Basic positive integers
@@ -114,7 +116,7 @@ if __name__ == '__main__':
     except Exception as e:
         print(f"Test Case 10 Failed with exception: {e}")
 
-    # --- Additional Aggressive Test Cases ---
+    # --- Additional Aggressive Test Cases (from original prompt) ---
 
     # Test Case 11: Negative float total, positive float count
     try:
@@ -163,5 +165,96 @@ if __name__ == '__main__':
         print(f"Test Case 16 Passed: calculate_average(7.5, 3) = {result}")
     except Exception as e:
         print(f"Test Case 16 Failed with exception: {e}")
+
+    # --- NEW AGGRESSIVE TEST CASES ---
+
+    # Test Case 17: Aggressive test - total is None (should raise TypeError)
+    try:
+        calculate_average(None, 5)
+        print("Test Case 17 Failed: Expected TypeError for None total, but no exception was raised.")
+    except TypeError as e:
+        assert "Total must be a number" in str(e), f"Test Case 17 Failed: Expected specific TypeError message, Got {e}"
+        print(f"Test Case 17 Passed: Caught expected TypeError for None total: {e}")
+    except Exception as e:
+        print(f"Test Case 17 Failed: Caught unexpected exception for None total: {type(e).__name__}: {e}")
+
+    # Test Case 18: Aggressive test - count is None (should raise TypeError)
+    try:
+        calculate_average(10, None)
+        print("Test Case 18 Failed: Expected TypeError for None count, but no exception was raised.")
+    except TypeError as e:
+        assert "Count must be a number" in str(e), f"Test Case 18 Failed: Expected specific TypeError message, Got {e}"
+        print(f"Test Case 18 Passed: Caught expected TypeError for None count: {e}")
+    except Exception as e:
+        print(f"Test Case 18 Failed: Caught unexpected exception for None count: {type(e).__name__}: {e}")
+
+    # Test Case 19: Aggressive test - total is a complex number (should raise TypeError)
+    try:
+        calculate_average(3 + 4j, 5)
+        print("Test Case 19 Failed: Expected TypeError for complex total, but no exception was raised.")
+    except TypeError as e:
+        assert "Total must be a number" in str(e), f"Test Case 19 Failed: Expected specific TypeError message, Got {e}"
+        print(f"Test Case 19 Passed: Caught expected TypeError for complex total: {e}")
+    except Exception as e:
+        print(f"Test Case 19 Failed: Caught unexpected exception for complex total: {type(e).__name__}: {e}")
+
+    # Test Case 20: Aggressive test - count is a complex number (should raise TypeError)
+    try:
+        calculate_average(10, 1 + 2j)
+        print("Test Case 20 Failed: Expected TypeError for complex count, but no exception was raised.")
+    except TypeError as e:
+        assert "Count must be a number" in str(e), f"Test Case 20 Failed: Expected specific TypeError message, Got {e}"
+        print(f"Test Case 20 Passed: Caught expected TypeError for complex count: {e}")
+    except Exception as e:
+        print(f"Test Case 20 Failed: Caught unexpected exception for complex count: {type(e).__name__}: {e}")
+
+    # Test Case 21: Aggressive test - total is a list (should raise TypeError)
+    try:
+        calculate_average([1, 2, 3], 3)
+        print("Test Case 21 Failed: Expected TypeError for list total, but no exception was raised.")
+    except TypeError as e:
+        assert "Total must be a number" in str(e), f"Test Case 21 Failed: Expected specific TypeError message, Got {e}"
+        print(f"Test Case 21 Passed: Caught expected TypeError for list total: {e}")
+    except Exception as e:
+        print(f"Test Case 21 Failed: Caught unexpected exception for list total: {type(e).__name__}: {e}")
+
+    # Test Case 22: Aggressive test - count is a tuple (should raise TypeError)
+    try:
+        calculate_average(10, (1, 2))
+        print("Test Case 22 Failed: Expected TypeError for tuple count, but no exception was raised.")
+    except TypeError as e:
+        assert "Count must be a number" in str(e), f"Test Case 22 Failed: Expected specific TypeError message, Got {e}"
+        print(f"Test Case 22 Passed: Caught expected TypeError for tuple count: {e}")
+    except Exception as e:
+        print(f"Test Case 22 Failed: Caught unexpected exception for tuple count: {type(e).__name__}: {e}")
+
+    # Test Case 23: Resulting in a non-terminating decimal (check with epsilon)
+    try:
+        result = calculate_average(1, 3)
+        expected = 1/3
+        assert abs(result - expected) < 1e-9, f"Test Case 23 Failed: Expected {expected}, Got {result}"
+        print(f"Test Case 23 Passed: calculate_average(1, 3) = {result}")
+    except Exception as e:
+        print(f"Test Case 23 Failed with exception: {e}")
+
+    # Test Case 24: Very large total, very small count, resulting in a very large float
+    # (Python handles this, but good to test the limits before inf)
+    try:
+        large_total = 1e300 # A very large float
+        small_count = 1e-300 # A very small float
+        result = calculate_average(large_total, small_count)
+        expected = large_total / small_count # Should be 1e600, which is inf
+        assert math.isinf(result), f"Test Case 24 Failed: Expected inf, Got {result}"
+        print(f"Test Case 24 Passed: calculate_average({large_total}, {small_count}) = {result}")
+    except Exception as e:
+        print(f"Test Case 24 Failed with exception: {e}")
+
+    # Test Case 25: Negative total, very small positive float count
+    try:
+        result = calculate_average(-10, 0.0000001)
+        assert abs(result - -100_000_000.0) < 1e-9, f"Test Case 25 Failed: Expected -100_000_000.0, Got {result}"
+        print(f"Test Case 25 Passed: calculate_average(-10, 0.0000001) = {result}")
+    except Exception as e:
+        print(f"Test Case 25 Failed with exception: {e}")
 
     print("\nAll tests completed.")
